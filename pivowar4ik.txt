@@ -1,23 +1,23 @@
 -- nixuz.
 
+
 if _G.version == "user" then
-    repeat
-        wait()
-    until game:IsLoaded()
-
-    setfpscap(144)
-
-    local L_144_ = game:GetService("ReplicatedStorage")
-    local L_145_ = game:GetService("HttpService")
-    local L_146_ = game:GetService("UserInputService")
-    local L_147_ = game:GetService("Lighting")
-    local L_148_ = game:GetService("TweenService")
-    local L_149_ = game:GetService("Players")
-    local L_150_ = workspace:FindFirstChild("settings") or Instance.new("Folder", workspace)
-    L_150_.Name = "settings"
-    local L_151_ = L_149_.LocalPlayer
-    local L_152_ = workspace.CurrentCamera
-    local L_153_ = L_151_:GetMouse()
+local L_1_ = false;
+if game.PlaceId == 8065776277 and L_1_ then
+	repeat
+		wait()
+	until game:IsLoaded()
+	setfpscap(144)
+	local L_144_ = game:GetService("ReplicatedStorage")
+	local L_145_ = game:GetService("HttpService")
+	local L_146_ = game:GetService("UserInputService")
+	local L_147_ = game:GetService("Lighting")
+	local L_148_ = game:GetService("TweenService")
+	local L_149_ = game:GetService("Players")
+	local L_150_ = workspace.settings;
+	local L_151_ = L_149_.LocalPlayer;
+	local L_152_ = workspace.CurrentCamera;
+	local L_153_ = L_151_:GetMouse()
 	local L_154_ = {}
 	local L_155_ = {
 		4,
@@ -7753,7 +7753,9 @@ rageAntiaim:AddSlider({
 	min = -89,
 	max = 89
 })
-
+rageOther:AddToggle({
+	text = "Kill All(No KA for yo <3)"
+})
 rageOther:AddToggle({
 	text = "Slide Walk"
 })
@@ -8382,8 +8384,8 @@ miscMain:AddToggle({
 				if L_100_ then
 					addBindtext("Aimbot", "hold")
 				end;
-			--	if noclipping then
-				--	addBindtext("Noclip", "hold")
+				if noclipping then
+					addBindtext("Noclip", "hold")
 				end;
 				if jumpbugging then
 					addBindtext("Jumpbug", "hold")
@@ -9101,19 +9103,19 @@ miscMeme:AddToggle({
 		end
 	end
 })
---iscMeme:AddToggle({
---	text = "Noclip"
---}):AddBind({
---	key = Enum.KeyCode.V,
---	mode = "hold",
---	callback = function(L_1477_arg0)
---		if not L_57_.alive or not library_flags["Noclip"] then
---			noclipping = false;
---			return
---		end;
---		noclipping = not L_1477_arg0
---	end
---})
+miscMeme:AddToggle({
+	text = "Noclip"
+}):AddBind({
+	key = Enum.KeyCode.V,
+	mode = "hold",
+	callback = function(L_1477_arg0)
+		if not L_57_.alive or not library_flags["Noclip"] then
+			noclipping = false;
+			return
+		end;
+		noclipping = not L_1477_arg0
+	end
+})
 miscMeme:AddToggle({
 	text = "Airstuck",
 	callback = function()
@@ -18516,6 +18518,9 @@ rageAntiaim:AddSlider({
 	max = 89
 })
 rageOther:AddToggle({
+	text = "Kill All(No KA for yo <3)"
+})
+rageOther:AddToggle({
 	text = "Slide Walk"
 })
 local L_112_;
@@ -19875,55 +19880,36 @@ function isTouchingWall()
 	end;
 	return false
 end;
--- Pixelsurf без отключения после смерти
 miscMeme:AddToggle({
-    text = "Pixelsurf"
+	text = "Pixelsurf"
 }):AddBind({
-    key = Enum.KeyCode.F,
-    mode = "hold",
-    callback = function(isHolding)
-        if library_flags["Pixelsurf"] then
-            local character = L_32_.Character or L_32_.CharacterAdded:Wait()
-            local hrp = character:WaitForChild("HumanoidRootPart")
-
-            -- Создаём BodyVelocity, если нет
-            if not L_125_ or not L_125_.Parent then
-                L_125_ = Instance.new("BodyVelocity")
-                L_125_.MaxForce = Vector3.new(0, 0, 0)
-                L_125_.Velocity = Vector3.new()
-                L_125_.Parent = hrp
-            end
-
-            if isHolding then
-                surfing = true
-                if isTouchingWall() then
-                    L_125_.MaxForce = Vector3.new(1500, 1500, 1500)
-                    L_125_.Velocity = Vector3.new()
-                else
-                    L_125_.MaxForce = Vector3.new(0, 0, 0)
-                end
-            else
-                surfing = false
-                L_125_.MaxForce = Vector3.new(0, 0, 0)
-                L_125_.Velocity = Vector3.new()
-            end
-        end
-    end
+	key = Enum.KeyCode.F,
+	mode = "hold",
+	callback = function(L_1482_arg0)
+		if L_125_ == nil then
+			L_125_ = Instance.new("BodyVelocity")
+		end;
+		if library_flags["Pixelsurf"] and not L_1482_arg0 then
+			if not L_57_.alive then
+				return
+			end;
+			local L_1483_ = L_32_.Character.HumanoidRootPart;
+			surfing = true;
+			if isTouchingWall() then
+				L_125_.MaxForce = Vector3.new(1500, 1500, 1500)
+				L_125_.Velocity = Vector3.new()
+				L_125_.Parent = L_32_.Character.HumanoidRootPart
+			else
+				L_125_.MaxForce = Vector3.new(0, 0, 0)
+				L_125_.Parent = nil
+			end
+		else
+			surfing = false;
+			L_125_.MaxForce = Vector3.new(0, 0, 0)
+			L_125_.Parent = nil
+		end
+	end
 })
-
--- Автовосстановление после смерти
-L_32_.CharacterAdded:Connect(function(char)
-    local hrp = char:WaitForChild("HumanoidRootPart")
-    if library_flags["Pixelsurf"] then
-        task.wait(0.5)
-        if not L_125_ then
-            L_125_ = Instance.new("BodyVelocity")
-        end
-        L_125_.MaxForce = Vector3.new(0, 0, 0)
-        L_125_.Velocity = Vector3.new()
-        L_125_.Parent = hrp
-    end
-end)
 miscMeme:AddToggle({
 	text = "Jumpbug"
 }):AddBind({
@@ -19939,19 +19925,19 @@ miscMeme:AddToggle({
 		end
 	end
 })
---miscMeme:AddToggle({
---	text = "Noclip"
---}):AddBind({
---	key = Enum.KeyCode.V,
---	mode = "hold",
---	callback = function(L_1485_arg0)
---		if not L_57_.alive or not library_flags["Noclip"] then
---			noclipping = false;
---			return
---		end;
---		noclipping = not L_1485_arg0
---	end
---})
+miscMeme:AddToggle({
+	text = "Noclip"
+}):AddBind({
+	key = Enum.KeyCode.V,
+	mode = "hold",
+	callback = function(L_1485_arg0)
+		if not L_57_.alive or not library_flags["Noclip"] then
+			noclipping = false;
+			return
+		end;
+		noclipping = not L_1485_arg0
+	end
+})
 miscMeme:AddToggle({
 	text = "Airstuck",
 	callback = function()
@@ -19973,7 +19959,7 @@ miscMeme:AddToggle({
 miscMeme:AddSlider({
 	text = "Jumpbug Height",
 	min = 2.5,
-	max = 5,
+	max = 4,
 	float = 0.25,
 	flag = "jbheight"
 })

@@ -10694,45 +10694,16 @@ L_28_.RenderStepped:Connect(function(L_1691_arg0)
 		local L_1753_ = library_flags["Roll"] ~= "None" and library_flags["Anti Aim"]
 		getgenv().antiAimCFrame = CFrame.new(L_1751_.Position, L_1752_.Position + L_1752_.CFrame.LookVector) * CFrame.Angles(0, 0, L_1753_ and math.rad(180) or 0)
 	end;
-if library_flags["Watermark"] then
-    -- Получаем время
-    local sec, min, hour = returntime("sec"), returntime("min"), returntime("hour")
-    local secStr = (string.len(sec) == 2) and sec or ("0" .. sec)
-    local minStr = (string.len(min) == 2) and min or ("0" .. min)
-    local hourStr = (string.len(hour) == 2) and hour or ("0" .. hour)
-
-    -- Текст (ник + время)
-    local wmText = L_32_.Name .. " | " .. hourStr .. ":" .. minStr .. ":" .. secStr
-    L_116_.Text = wmText
-
-    -- Размер квадратной рамки
-    local boxSize = 150 -- размер квадрата
-    local boxPos = UDim2.new(0, 20, 0, 20) -- позиция на экране
-
-    -- Создаём чёрный фон
-    if not L_116_.BackgroundColor3 then
-        L_116_.BackgroundTransparency = 0
-        L_116_.BackgroundColor3 = Color3.new(0, 0, 0) -- чёрный фон
-    end
-
-    -- Делаем белую обводку
-    if not L_116_.BorderSizePixel then
-        L_116_.BorderSizePixel = 2
-        L_116_.BorderColor3 = Color3.new(1, 1, 1) -- белая рамка
-    end
-
-    -- Фиксируем квадрат
-    L_116_.Size = UDim2.new(0, boxSize, 0, boxSize)
-    L_116_.Position = boxPos
-    L_116_.TextSize = 14
-    L_116_.TextColor3 = Color3.new(1, 1, 1) -- белый текст
-    L_116_.TextWrapped = true -- перенос текста, если длинный
-    L_116_.TextScaled = false
-    L_116_.Font = Enum.Font.SourceSansBold
-    L_116_.TextXAlignment = Enum.TextXAlignment.Center
-    L_116_.TextYAlignment = Enum.TextYAlignment.Center
-end
-
+	if library_flags["Watermark"] then
+		local L_1754_, L_1755_, L_1756_ = returntime("sec"), returntime("min"), returntime("hour")
+		local L_1757_ = string.len(L_1754_) == 2 and L_1754_ or "0" .. L_1754_;
+		local L_1758_ = string.len(L_1755_) == 2 and L_1755_ or "0" .. L_1755_;
+		local L_1759_ = string.len(L_1756_) == 2 and L_1756_ or "0" .. L_1756_;
+		L_116_.Text = " cuteware | " .. L_1759_ .. ":" .. L_1758_ .. ":" .. L_1757_ .. " | " .. L_32_.Name;
+		if L_116_.TextBounds.X > 210 then
+			L_116_.TextSize = L_116_.TextSize - 1
+		end
+	end;
 	if L_57_.alive then
 		local L_1760_ = not L_57_.melee and library_flags["FOV Circle"] and library_flags["aimbotEnabled"]
 		L_113_.Radius = L_57_.FOV * 3;
